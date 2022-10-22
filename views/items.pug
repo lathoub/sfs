@@ -1,0 +1,16 @@
+extends layout.pug
+
+block append scripts
+
+block content
+
+  .content
+    h1 #{json.type}  in #{json.name} 
+    h2 Links
+    each link in json.links
+      p #{link.rel} = 
+        a(href= link.href)  #{link.title} 
+        | (#{link.type})
+    h2 #{json.type}
+    each file in json.files
+      p #{file}
