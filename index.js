@@ -21,7 +21,6 @@ app.use(cors());
 app.use(express.static('./public'));
 
 // setup middleware to decode the content-type
-// see http://docs.opengeospatial.org/is/17-069r3/17-069r3.html#_encodings
 app.use(encodings)
 
 app.use('/v1.0', route)

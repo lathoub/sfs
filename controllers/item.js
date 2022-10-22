@@ -8,15 +8,20 @@ function removeExtension(filename) {
 
 function get(req, res) {
 
-  var fileNameNoExt = removeExtension(req.params.fileName)
   var collectionId = req.params.collectionId
 
   var accept = req.headers['accept']
 
-  if (accept == 'model/gltf-binary') {
-    var fileName = fileNameNoExt + '.glb'
+  if (accept == '*/*') {
+    var fileName = req.params.fileName
     const fileFullPath = path.join(global.dataDirectory, collectionId, fileName)
     res.download(fileFullPath);
+  }
+  else if (accept == 'model/gltf-binary') {
+    var fileNameNoExt = removeExtension(req.params.fileName)
+    var fileName = fileNameNoExt + '.glb'
+    const fileFullPath = path.join(global.dataDirectory, collectionId, fileName)
+    res.download(fileFullPath); // convert
   }
   else
     res.json(400, "{'code': 'InvalidParameterValue', 'description': 'Invalid accept, only accepting model/gltf-binary'}")
