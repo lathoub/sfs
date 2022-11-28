@@ -1,0 +1,4 @@
+Na "build mimage...", in Docker dan "Push to HUb"
+Je krijgt dan een fout melding (ivm auth)
+Rename de image dan van sfs naar /lathoub/sfs, op deze manier:
+docker image tag sfs:latest lathoub/sfs:latest
