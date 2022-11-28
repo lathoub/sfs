@@ -5,36 +5,50 @@ block append scripts
 block content
 
   .content
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="#">Home</a></li>
-        <li class="breadcrumb-item"><a href="#">Collections</a></li>
-        <li class="breadcrumb-item active" aria-current="page">#{json.name}</li>
-      </ol>
+
+    <nav class="navbar navbar-light bg-light navbar-expand-sm">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="#{new URL('..', json.links[0].href)}">Home</a></li>
+          <li class="breadcrumb-item"><a href="#{new URL('.', json.links[0].href)}">Collections</a></li>
+          <li class="breadcrumb-item"><a href="#{new URL('.', json.links[0].href)}">#{json.name}</a></li>
+          <li class="breadcrumb-item active">Items</li>
+        </ol>
+      </nav>
     </nav>
 
-    h2 Links
-    each link in json.links
-      p #{link.rel} = 
-        a(href= link.href)  #{link.title} 
-        | (#{link.type})
-    h2 #{json.type}
-
-    <table class="table table-striped table-hover" id="Extension1">
+    <!-- sorting symbols ↑↓-->
+    <table class="table table-striped table-hover">
     <thead>
       <tr>
-          <th>Filename</th>
-          <th>Date</th>
+          <th>Name</th>
+          <th>Date Modified</th>
           <th>Size</th>
+          <th>Kind</th>
       </tr>
     </thead>
+
+    -function formatBytes(a,b=2){if(!+a)return"0 Bytes";const c=0>b?0:b,d=Math.floor(Math.log(a)/Math.log(1024));return`${parseFloat((a/Math.pow(1024,d)).toFixed(c))} ${["Bytes","KB","MB","GB","TB","PB","EB","ZB","YB"][d]}`}
+
     <tbody>
-
-
       each file in json.files
-        <tr><td>#{file.fname}</td><td>#{file.atime}</td><td>#{file.fsize}</td></tr>
+        <tr>
+        <td>
+          if file.kind == 1
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAhGVYSWZNTQAqAAAACAAFARIAAwAAAAEAAQAAARoABQAAAAEAAABKARsABQAAAAEAAABSASgAAwAAAAEAAgAAh2kABAAAAAEAAABaAAAAAAAAAEgAAAABAAAASAAAAAEAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAGKADAAQAAAABAAAAGAAAAAARDxiuAAAACXBIWXMAAAsTAAALEwEAmpwYAAABWWlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iWE1QIENvcmUgNi4wLjAiPgogICA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPgogICAgICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIgogICAgICAgICAgICB4bWxuczp0aWZmPSJodHRwOi8vbnMuYWRvYmUuY29tL3RpZmYvMS4wLyI+CiAgICAgICAgIDx0aWZmOk9yaWVudGF0aW9uPjE8L3RpZmY6T3JpZW50YXRpb24+CiAgICAgIDwvcmRmOkRlc2NyaXB0aW9uPgogICA8L3JkZjpSREY+CjwveDp4bXBtZXRhPgoZXuEHAAACmElEQVRIDa2Vz4uOURSAvxkSwtCYSGPxmSKJ7ZB/wE5ZKLLARpHkD/AXsCUbhUwpUQorK1azEtlI2Sj5VeT3DIbnue89r/u+3/hoOPV8995zzz3nnnPve7+BTlPOM9wM72A+/IDfyTQT6+E6HIWBzAxtQwbzaB3tncbMnwcnMPkCJwvT8JdU5cDdvs2G6hfCghZmpcyrms5S2n2wGK5mnX5qv3UnT4YD03RnlqHkG2PXWA7FTUzBEXgOp8AArk824ZBxkli4hdE4fAYdfgd3+QAmITJ4Q/8gGPg2TMAiMGBa1w6gUhmFbRCHbRaW4z0YIOxO0z8OO+EjeBZ7YRW8gLThMO6iuAn/Kp7FWHYy2M4gSmSay8DULccH+Arq4hrGYbpB0eYTeC6WNEk7QIx3M3sYXsFq8PDugjU2qM4VN+R4BZyBC+CGYqN0f9WzS/9W0lQ/UbqGcTFfdkubG0zoS+kpUaXudJbQcVfuTold1alX6vRrNmbujbJMZbA0ga6WKNEuNJbIReqiJHSTGNgMDVyW6GLW0VQSDmPsQSoaylwksk5r2wEivZXMrgEDhs4sov+I/hCMgt+IT8ozeA1hQ7dKP3XyTwTcwfgQlCUygGXR5gBsh2PwEkbgLFwCy9YQFyld+B8fWt9bFMHWEmwMfMjUlYdsCcqxfUv0BJ5C+KDbW6KY3MrcfvD57kkZnaLecnmoy+EcXIbwQbc3QNyAK8zJXCR8pLVxqLM5cof1u54N4qD94DbARvB/w7frITyGvhmUVyzqHC1rU+3DZhPjPeBNGwZvkAHcWL2mnYH3PkSj2jCUtJbAINcyNA3xTyo20UhHpe9PyGzO/2ZOH3UAM4j33Wsm9yD+yfoFwazOUIdmNgT3QT/KzE8GXIewgQtPCQAAAABJRU5ErkJggg==">
+          else if file.kind == 2
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAhGVYSWZNTQAqAAAACAAFARIAAwAAAAEAAQAAARoABQAAAAEAAABKARsABQAAAAEAAABSASgAAwAAAAEAAgAAh2kABAAAAAEAAABaAAAAAAAAAEgAAAABAAAASAAAAAEAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAGKADAAQAAAABAAAAGAAAAAARDxiuAAAACXBIWXMAAAsTAAALEwEAmpwYAAACMGlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iWE1QIENvcmUgNi4wLjAiPgogICA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPgogICAgICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIgogICAgICAgICAgICB4bWxuczpleGlmPSJodHRwOi8vbnMuYWRvYmUuY29tL2V4aWYvMS4wLyIKICAgICAgICAgICAgeG1sbnM6dGlmZj0iaHR0cDovL25zLmFkb2JlLmNvbS90aWZmLzEuMC8iPgogICAgICAgICA8ZXhpZjpQaXhlbFlEaW1lbnNpb24+MzI8L2V4aWY6UGl4ZWxZRGltZW5zaW9uPgogICAgICAgICA8ZXhpZjpQaXhlbFhEaW1lbnNpb24+MzI8L2V4aWY6UGl4ZWxYRGltZW5zaW9uPgogICAgICAgICA8ZXhpZjpDb2xvclNwYWNlPjE8L2V4aWY6Q29sb3JTcGFjZT4KICAgICAgICAgPHRpZmY6T3JpZW50YXRpb24+MTwvdGlmZjpPcmllbnRhdGlvbj4KICAgICAgPC9yZGY6RGVzY3JpcHRpb24+CiAgIDwvcmRmOlJERj4KPC94OnhtcG1ldGE+CrgvpBAAAAF7SURBVEgN7ZS7SgNBFIYTjffGC2phYxBbO1/AVq19ifgitoI+g4UWllrY2thJyhiwUqxEEEQTv2+TkbAyu5uYdP7wzWR3zpz/zCVbLnVU7vZ5XTsvID1eNHHvvKJzkmJC8BoZViBWoXFv0IAvKCLntG32YQ/eISaNp0CDG4gVwlDpE5rwCmUNzuAI7iBLrvAUXuAKZqEFaY3zYgGuoV6heQKTT0Js+RbyDBewDeeQpV0GtyAxCIEmzzIw7hZ2oAaPMAHp7frg3SZMO25lx3AILi1mwFDJWJNtwAHMdJ/pfknjdag7ooHSIE+aFFWVwEvPoB+5gjHQyNXGDI1rQqNfA+b83JxYcmOUZ1AZxCCZTZM+3PA+GCdX2OWOVP8Guds78i3qvUWefrgBuZVlBJjDG5bk0iB8Ee1jV4+hwgo5/CO2NFiCZfD77ZaFAH4OJCu32HlY1OAeTsDP8bDOxCLn4CHseZWHVfhr9aRIZF4LbnQeR9iGFYR+2FbtbwATRF9TkrjiAAAAAElFTkSuQmCC">
+          <a href="#{file.links[0].href}">#{file.name}</a></td>
+        <td>#{new Date(file.time).toUTCString()}</td>
+        <td>#{formatBytes(file.size)}</td>
+        if file.kind == 1
+          <td>File</td>
+        else if file.kind == 2
+          <td>Folder</td>
+        else
+          <td>Unknown</td>
+        </tr>
     </tbody>
     </table>
 
-
-
+    <p style="text-align:center">#{json.numberReturned} items</p>

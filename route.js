@@ -14,6 +14,7 @@ const upload = multer({
     storage: multer.diskStorage({
         destination: function (req, file, callback) {
             var collectionId = req.params.collectionId
+            // TODO: check if path exists
             callback(null, path.join(global.dataDirectory, collectionId))
         },
         filename: function (req, file, callback) {
@@ -47,7 +48,7 @@ router.get('/collections/:collectionId.:ext?', collection.get)
 
 // For every file collection identified in the file collections response (path /collections), 
 // the server SHALL support the HTTP GET operation at the path /collections/{collectionId}/items.
-router.get('/collections/:collectionId/items.:ext?', items.get)
+router.get('/collections/:collectionId/items', items.get)
 router.post('/collections/:collectionId/items', upload.single("file"), items.post)
 
 // For every file in a file collection (path /collections/{collectionId}), 

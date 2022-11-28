@@ -2,20 +2,32 @@ extends layout.pug
 
 block content
 
-  h1 Metadata about the simple file server
-  h2 Collections
+  .content
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#">Home</a></li>
+        <li class="breadcrumb-item active">Collections</li>
+      </ol>
+    </nav>
 
-  each collection in json.collections
+    <!-- sorting symbols ↑↓-->
+    <table class="table table-striped table-hover">
+    <thead>
+      <tr>
+          <th>Name ↓</th>
+          <th>Date Modified</th>
+          <th>Size</th>
+          <th>Kind</th>
+      </tr>
+    </thead>
+    <tbody>
+      each collection in json.collections
+        <tr>
+        <td><a href="alink">#{collection.title}</a></td>
+        <td>sometime</td><td>--</td>
+        <td>Folder</td>
+        </tr>
+    </tbody>
+    </table>
 
-    h3 #{collection.title}
-    p #{collection.description}
-    h4 Links for the collection
-      each link in collection.links
-        p #{link.rel} = 
-          a(href= link.href)  #{link.title} 
-          | (#{link.type})
-  h2 Links
-  each link in json.links
-    p #{link.rel} = 
-      a(href= link.href)  #{link.title} 
-      | (#{link.type})
+    <p style="text-align:center">#{json.collections.length} items</p>

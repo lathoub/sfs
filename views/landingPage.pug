@@ -2,10 +2,11 @@ extends layout.pug
 
 block content
 
-  h1 Simple File Server
-  h2 Links
+  .content
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page">Home</li>
+      </ol>
+    </nav>
 
-  each link in json.links
-    p #{link.rel} = 
-      a(href= link.href)  #{link.title} 
-      | (#{link.type})
+  h1 Simple File Server

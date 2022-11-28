@@ -9,6 +9,9 @@ function get (req, res) {
 
   var collectionId = req.params.collectionId
   var serviceUrl = utils.getServiceUrl(req)
+  var path = req.params[0]
+
+// TODO: check if last part is a file reference
 
   debug(`items serviceUrl ${serviceUrl} collectionId ${collectionId}`)
 

@@ -41,7 +41,7 @@ var encodings = function (req, res, next) {
 
   delete req.query.f;
   delete req.query.accept;
-
+/*
   if (mediaType) {
     if (['json', 'application/json'].includes(mediaType))
       req.headers['accept'] = 'application/json,' + req.headers['accept']
@@ -54,6 +54,7 @@ var encodings = function (req, res, next) {
       return
     }
   }
+*/
 
   next()
 }
